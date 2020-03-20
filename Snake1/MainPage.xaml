@@ -4,19 +4,42 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             xmlns:local="clr-namespace:Snake1"
              x:Class="Snake1.MainPage">
-
-    <StackLayout>
-        <Button
-            Text="Start"
-            HorizontalOptions="Center"
-            x:Name="start_button"
-            Clicked="start_button_Clicked"/>
-        <Button 
-            Text="Start"
-            HorizontalOptions="Center"
-            x:Name="stop_button"
-            Clicked="stop_button_Clicked"/>
-    </StackLayout>
-
+    
+    <ContentView>
+        <AbsoluteLayout BackgroundColor="Aqua" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <BoxView
+                x:Name="Head"
+                Color="Green"
+                CornerRadius="55"
+                AbsoluteLayout.LayoutBounds="0.5, 0.5, 0.05, 0.05"
+                AbsoluteLayout.LayoutFlags="All"/>
+            
+            <Button
+                Text="Start"
+                AbsoluteLayout.LayoutBounds="0.1, 0.97, 0.3, 0.05"
+                AbsoluteLayout.LayoutFlags="All"
+                x:Name="start_button"
+                Clicked="start_button_Clicked"/>
+            <Button 
+                Text="Stop"
+                AbsoluteLayout.LayoutBounds="0.9, 0.97, 0.3, 0.05"
+                AbsoluteLayout.LayoutFlags="All"
+                x:Name="stop_button"
+                Clicked="stop_button_Clicked"/>
+            
+            <Label
+                x:Name="LabelAcc"
+                AbsoluteLayout.LayoutBounds="0.1, 0.1, 0.05, 0.05"
+                AbsoluteLayout.LayoutFlags="All"
+                Text="init"/>
+            <Label
+                x:Name="LabelPos"
+                AbsoluteLayout.LayoutBounds="0.15, 0.1, 0.05, 0.05"
+                AbsoluteLayout.LayoutFlags="All"
+                Text="init"/>
+            
+        </AbsoluteLayout>
+    </ContentView>
 </ContentPage>
