@@ -9,7 +9,7 @@ namespace Snake1
         public double X { get; set; }
         public double Y { get; set; }
 
-        public Coordinate(double x = 0, double y = 0)
+        public Coordinate(double x = 0.5, double y = 0.5)
         {
             this.X = x;
             this.Y = y;
@@ -58,6 +58,11 @@ namespace Snake1
         public static bool operator !=(Coordinate valueLeft, Coordinate valueRight)
         {
             return valueLeft.X != valueRight.X && valueLeft.Y != valueRight.Y;
+        }
+
+        public static Coordinate operator *(Coordinate valueLeft, double valueRight)
+        {
+            return new Coordinate(valueLeft.X * valueRight, valueLeft.Y * valueRight);
         }
     }
 }

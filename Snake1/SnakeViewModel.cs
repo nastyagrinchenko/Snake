@@ -17,26 +17,6 @@ namespace Snake1.ViewModel
             public Coordinate position;
         };
 
-        public _part Part;
-
-        private List<_part> _tail;
-
-        public List<_part> Tail
-        {
-            get => _tail;
-
-            set
-            {
-                if (_tail == value)
-                    return;
-
-                _tail = value;
-                OnPropertyChanged(nameof(Tail));
-            }
-        }
-
-        public int r = 2;
-
         void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -44,8 +24,7 @@ namespace Snake1.ViewModel
 
         public SnakeViewModel()
         {
-            Part = new _part();
-            Tail = new List<_part>();
+           
         }
 
     }

@@ -7,31 +7,28 @@
              xmlns:local="clr-namespace:Snake1.ViewModel"
              x:Class="Snake1.MainPage">
 
-    <ContentPage.BindingContext>
-        <local:ApplesViewModel/>
-    </ContentPage.BindingContext>
-
     <ContentView>
-        <AbsoluteLayout x:Name="absLayout" BackgroundColor="Aqua" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <!--<CollectionView ItemsSource="{Binding Tail}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <BoxView
-                            BackgroundColor="Yellow"
-                            AbsoluteLayout.LayoutBounds="0.5, 0.7, 0.1, 0.1"
-                            CornerRadius="{Binding r}"/>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>-->
-            <!--<BoxView AbsoluteLayout.LayoutBounds="{Binding Path=Apples}"/>-->
+        <AbsoluteLayout x:Name="absLayout" BackgroundColor="DarkCyan" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <BoxView 
+                x:Name="wallUp"
+                BackgroundColor="Red"
+                AbsoluteLayout.LayoutBounds="0.8, 0.25, 0.54, 0.02"
+                CornerRadius="40"
+                AbsoluteLayout.LayoutFlags="All"/>
 
+            <BoxView 
+                x:Name="wallDown"
+                BackgroundColor="Red"
+                AbsoluteLayout.LayoutBounds="0.2, 0.4, 0.2, 0.2"
+                CornerRadius="50"
+                AbsoluteLayout.LayoutFlags="All"/>
+            
             <BoxView
                 x:Name="Head"
-                Color="Red"
+                Color="Moccasin"
                 CornerRadius="10"
                 AbsoluteLayout.LayoutBounds="0.5, 0.5, 0.04, 0.02"
                 AbsoluteLayout.LayoutFlags="All"/>
-
             <Button
                 Text="Start"
                 AbsoluteLayout.LayoutBounds="0.1, 0.97, 0.3, 0.05"
@@ -44,12 +41,9 @@
                 AbsoluteLayout.LayoutFlags="All"
                 x:Name="stop_button"
                 Clicked="stop_button_Clicked"/>
-            
-            <Label
-                x:Name="LabelAcc"
-                Text="init"/>
             <Label
                 x:Name="LabelPos"
+                TextColor="White"
                 Padding="15"
                 Text="init"/>
             

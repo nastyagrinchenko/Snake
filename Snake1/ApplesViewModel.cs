@@ -17,27 +17,9 @@ namespace Snake1.ViewModel
             public Coordinate position;
         };
 
-        private List<Coordinate> apples;
-
-        public List<Coordinate> Apples
-        {
-            get => apples;
-            set
-            {
-                if (apples == value)
-                    return;
-
-                apples = value;
-                OnPropertyChanged(nameof(Apples));
-            }
-        }
-
         public ApplesViewModel()
         {
-            List<Coordinate> firstList = new List<Coordinate>();
-            firstList.Add(new Coordinate(0.2, 0.2));
 
-            Apples = firstList;
         }
 
         void OnPropertyChanged(string name)

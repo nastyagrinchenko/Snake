@@ -19,9 +19,11 @@ namespace Snake1
     {
         public Size boxSize = new Size(0.04, 0.02);
 
+        public Size tailBoxSize = new Size(0.02, 0.01);
+
         public Size appleSize = new Size(0.02, 0.01);
 
-        int delay = 0;
+        int appleCount = 0;
 
         public Queue<ApplesViewModel._apple> apples = new Queue<ApplesViewModel._apple>();
 
@@ -29,29 +31,9 @@ namespace Snake1
 
         private Queue<SnakeViewModel._part> tail = new Queue<SnakeViewModel._part>();
 
-        private int tailSize = 1;
-
-        SnakeViewModel SnakeTailView = new SnakeViewModel();
-        ApplesViewModel ApplesView = new ApplesViewModel();
-
         public MainPage()
         {
             InitializeComponent();
-            SnakeViewModel._part part = new SnakeViewModel._part
-            {
-                view = new BoxView { BackgroundColor = Color.Orange, CornerRadius = 10 },
-                position = currentPosition + 0.004,
-            };
-            SnakeViewModel._part part2 = new SnakeViewModel._part
-            {
-                view = new BoxView { BackgroundColor = Color.Black, CornerRadius = 10 },
-                position = currentPosition + 0.008,
-            };
-
-            tail.Enqueue(part);
-            tail.Enqueue(part2);
-            absLayout.Children.Add(part.view, new Rectangle(new Point(part.position.X, part.position.Y), boxSize), AbsoluteLayoutFlags.All);
-            absLayout.Children.Add(part2.view, new Rectangle(new Point(part2.position.X, part2.position.Y), boxSize), AbsoluteLayoutFlags.All);
 
             updateApples(true);
         }
@@ -61,7 +43,7 @@ namespace Snake1
             if (Accelerometer.IsMonitoring)
                 return;
 
-            resetSnake();
+            updateApples(true);
 
             Accelerometer.ReadingChanged += Accelerometer_ReadingChanged;
             Accelerometer.Start(SensorSpeed.UI);
@@ -69,6 +51,8 @@ namespace Snake1
         
         private void stop_button_Clicked(object sender, EventArgs e)
         {
+            resetSnake();
+
             if (!Accelerometer.IsMonitoring)
                 return;
 
@@ -79,53 +63,66 @@ namespace Snake1
         private void Accelerometer_ReadingChanged(object sender, AccelerometerChangedEventArgs e)
         {
             var data = e.Reading;
-            delay++;
 
-            if (delay == 2)
+            double remeberHeadX = currentPosition.X;
+            double remeberHeadY = currentPosition.Y;
+
+            currentPosition.X += -1 * data.Acceleration.X / 40;
+            currentPosition.Y += data.Acceleration.Y / 40;
+
+            if (checkHeadBounds())
             {
-                Coordinate remeberHead = currentPosition;
-
-                currentPosition.X += -1 * data.Acceleration.X / 30;
-                currentPosition.Y += data.Acceleration.Y / 30;
-
-                if (checkHeadBounds())
+                if (haveEaten())
                 {
-                    if (haveEaten())
-                    {
-                        updateApples();
-                        //updateTail(true);
-                    }
-                    else
-                    {
-                        updateTail(false, remeberHead);
-                        //AbsoluteLayout.SetLayoutBounds(Head, new Rectangle(new Point(currentPosition.X, currentPosition.Y), boxSize));
-                    }
+                    updateApples();
+                    drawTail(new Coordinate(remeberHeadX, remeberHeadY), true);
+                    appleCount++;
                 }
                 else
                 {
-                    stopGame();
+                    drawTail(new Coordinate(remeberHeadX, remeberHeadY), false);
                 }
-
-
-                LabelAcc.Text = $"X {data.Acceleration.X.ToString()} Y {data.Acceleration.Y.ToString()}";
-                LabelPos.Text = currentPosition.ToString();
-                delay = 0;
             }
+            else
+            {
+                stopGame();
+                resetSnake();
+            }
+
+            LabelPos.Text = $"Apple count {appleCount}";
         }
 
         private Coordinate genApplePosition()
         {
             Random r = new Random();
+            Coordinate pos = new Coordinate();
 
             int minValue = 11;
             int maxValue = 33;
 
-            return new Coordinate(r.Next(minValue, maxValue) / (maxValue + 0.5), r.Next(minValue, maxValue) / (maxValue + 0.5));
+            do
+                pos = new Coordinate(r.Next(minValue, maxValue) / (maxValue + 0.5), r.Next(minValue, maxValue) / (maxValue + 0.5));
+            while (wallUp.Bounds.IntersectsWith(new Rectangle(new Point(pos.X, pos.Y), appleSize)) && wallDown.Bounds.IntersectsWith(new Rectangle(new Point(pos.X, pos.Y), appleSize)));
+
+            return pos;
         }
 
         private bool checkHeadBounds()
         {
-            return currentPosition > new Coordinate() && currentPosition < new Coordinate(1,1);
+            if (currentPosition > new Coordinate(0, 0) && currentPosition < new Coordinate(1, 1))
+            {
+                if (Head.Bounds.IntersectsWith(wallUp.Bounds))
+                    return false;
+                else
+                {
+                    if (Head.Bounds.IntersectsWith(wallDown.Bounds))
+                        return false;
+                    else
+                        return true;
+                }
+            }
+            else
+                return false;
         }
 
         private async void stopGame()
@@ -135,25 +132,6 @@ namespace Snake1
             resetSnake();
 
             await Navigation.PushModalAsync(new ModalFail());
-        }
-
-        private void updateTail(bool add = false, Coordinate remeberHead = null)
-        {
-            //SnakeViewModel._part part = new SnakeViewModel._part
-            //{
-            //    view = new BoxView { BackgroundColor = Color.Orange, CornerRadius=10 },
-            //    position = currentPosition,
-            //};
-
-            //tail.Enqueue(part);
-            if (!add)
-            {
-                //tail.Dequeue();
-                drawTail(false, remeberHead);    
-            }
-            else
-                drawTail(true);
-
         }
 
         private void updateApples(bool init = false)
@@ -166,7 +144,7 @@ namespace Snake1
 
             ApplesViewModel._apple ap = new ApplesViewModel._apple
             {
-                view = new BoxView { CornerRadius = 10, BackgroundColor = Color.Green },
+                view = new BoxView { CornerRadius = 10, BackgroundColor = Color.Azure },
                 position = genApplePosition(),
             };
 
@@ -175,17 +153,17 @@ namespace Snake1
             absLayout.Children.Add(apples.Peek().view, new Rectangle(new Point(apples.Peek().position.X, apples.Peek().position.Y), appleSize), AbsoluteLayoutFlags.All);
         }
 
-        private void drawTail(bool add = false, Coordinate remeberHead = null)
+        private void drawTail(Coordinate remeberHead, bool add = false)
         {
             if (add)
             {
-                //tailView.Add(new BoxView
-                //{
-                //    CornerRadius = 10,
-                //    BackgroundColor = Color.Red
-                //});
-                //absLayout.Children.Add(tailView.ElementAt(tailView.Count-1));
-                moveSnake();
+                tail.Enqueue(new SnakeViewModel._part
+                {
+                    view = new BoxView { CornerRadius = 10, BackgroundColor = Color.Orange },
+                    position = new Coordinate(),
+                });
+                absLayout.Children.Add(tail.ElementAt(tail.Count - 1).view, new Rectangle(new Point(tail.ElementAt(tail.Count - 1).position.X, tail.ElementAt(tail.Count - 1).position.Y), tailBoxSize), AbsoluteLayoutFlags.All);
+                moveSnake(remeberHead);
             }
             else
             {
@@ -193,9 +171,10 @@ namespace Snake1
             }
         }
 
-        private void moveSnake(Coordinate remeberHead = null)
+        private void moveSnake(Coordinate remeberHead)
         {
             int i = 0;
+            Queue<SnakeViewModel._part> dublicate = new Queue<SnakeViewModel._part>();
 
             if (tail.Count == 0)
             {
@@ -205,42 +184,30 @@ namespace Snake1
 
             Queue<SnakeViewModel._part> tempTail = tail;
 
-            //tail.Peek().position = new Coordinate();
             foreach (SnakeViewModel._part part in tail)
             {
                 if (i == 0)
                 {
-                    part.position.X = remeberHead.X;
-                    part.position.Y = remeberHead.Y;
-                    AbsoluteLayout.SetLayoutBounds(part.view, new Rectangle(new Point(part.position.X, part.position.Y), boxSize));
+                    dublicate.Enqueue(new SnakeViewModel._part { view = part.view, position = remeberHead });
+                    AbsoluteLayout.SetLayoutBounds(part.view, new Rectangle(new Point(remeberHead.X, remeberHead.Y), tailBoxSize));
                     AbsoluteLayout.SetLayoutBounds(Head, new Rectangle(new Point(currentPosition.X, currentPosition.Y), boxSize));
                     i++;
                 }
                 else
                 {
-                    part.position.X = tempTail.ElementAt(i - 1).position.X;
-                    part.position.Y = tempTail.ElementAt(i - 1).position.Y;
-                    AbsoluteLayout.SetLayoutBounds(part.view, new Rectangle(new Point(part.position.X, part.position.Y), boxSize));
+                    dublicate.Enqueue(new SnakeViewModel._part { view = part.view, position = tail.ElementAt(i - 1).position });
+                    AbsoluteLayout.SetLayoutBounds(part.view, new Rectangle(new Point(tail.ElementAt(i - 1).position.X, tail.ElementAt(i - 1).position.Y), tailBoxSize));
                     i++;
                 }
             }
+
+            tail = dublicate;
         }
 
         private bool haveEaten()
         {
-            //SnakeViewModel._part nw;
-            //nw.view = new BoxView { BackgroundColor = Color.Yellow };
-            //nw.position = new Coordinate();
-
-            //List<SnakeViewModel._part>  nwl = new List<SnakeViewModel._part>();
-            //nwl.Add(nw);
-            //SnakeTailView.Tail = nwl;
-
             foreach (ApplesViewModel._apple apple in apples)
             {
-                double appleHieght = apple.position.Y + boxSize.Height;
-                double appleWidth = apple.position.X + boxSize.Width;
-
                 if (currentPosition > apple.position - boxSize.Height / 2 && currentPosition < apple.position + boxSize.Height / 2)
                     return true;
                 else
@@ -254,6 +221,22 @@ namespace Snake1
         {
             currentPosition = new Coordinate(0.5, 0.5);
             AbsoluteLayout.SetLayoutBounds(Head, new Rectangle(new Point(currentPosition.X, currentPosition.Y), boxSize));
+
+            foreach (SnakeViewModel._part part in tail)
+            {
+                absLayout.Children.Remove(part.view);
+            }
+            tail.Clear();
+
+            appleCount = 0;
+
+            foreach (ApplesViewModel._apple part in apples)
+            {
+                absLayout.Children.Remove(part.view);
+            }
+
+            apples.Clear();
+
         }
     }
 }
