@@ -4,18 +4,34 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             xmlns:local="clr-namespace:Snake1"
+             xmlns:local="clr-namespace:Snake1.ViewModel"
              x:Class="Snake1.MainPage">
-    
+
+    <ContentPage.BindingContext>
+        <local:ApplesViewModel/>
+    </ContentPage.BindingContext>
+
     <ContentView>
-        <AbsoluteLayout BackgroundColor="Aqua" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+        <AbsoluteLayout x:Name="absLayout" BackgroundColor="Aqua" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <!--<CollectionView ItemsSource="{Binding Tail}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <BoxView
+                            BackgroundColor="Yellow"
+                            AbsoluteLayout.LayoutBounds="0.5, 0.7, 0.1, 0.1"
+                            CornerRadius="{Binding r}"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>-->
+            <!--<BoxView AbsoluteLayout.LayoutBounds="{Binding Path=Apples}"/>-->
+
             <BoxView
                 x:Name="Head"
-                Color="Green"
-                CornerRadius="55"
-                AbsoluteLayout.LayoutBounds="0.5, 0.5, 0.05, 0.05"
+                Color="Red"
+                CornerRadius="10"
+                AbsoluteLayout.LayoutBounds="0.5, 0.5, 0.04, 0.02"
                 AbsoluteLayout.LayoutFlags="All"/>
-            
+
             <Button
                 Text="Start"
                 AbsoluteLayout.LayoutBounds="0.1, 0.97, 0.3, 0.05"
@@ -31,13 +47,10 @@
             
             <Label
                 x:Name="LabelAcc"
-                AbsoluteLayout.LayoutBounds="0.1, 0.1, 0.05, 0.05"
-                AbsoluteLayout.LayoutFlags="All"
                 Text="init"/>
             <Label
                 x:Name="LabelPos"
-                AbsoluteLayout.LayoutBounds="0.15, 0.1, 0.05, 0.05"
-                AbsoluteLayout.LayoutFlags="All"
+                Padding="15"
                 Text="init"/>
             
         </AbsoluteLayout>

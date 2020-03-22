@@ -1,13 +1,12 @@
 ﻿using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Snake1.ViewModel;
 
 namespace Snake1
 {
     public partial class App : Application
     {
-        public static int ScreenHeight;
-        public static int ScreenWidth;
         public App()
         {
             InitializeComponent();

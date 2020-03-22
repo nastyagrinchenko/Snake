@@ -13,10 +13,14 @@ namespace Snake1
         {
             Content = new StackLayout
             {
+                VerticalOptions = LayoutOptions.FillAndExpand,
                 Children = {
                     new Label {
                         Text = "Fail!",
+                        FontSize=22,
+                        VerticalOptions=LayoutOptions.CenterAndExpand,
                         BackgroundColor=Color.White,
+                        TextColor=Color.Red,
                     }
                 }
             };

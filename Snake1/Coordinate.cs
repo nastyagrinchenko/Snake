@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Snake1
 {
-    class Coordinate
+    public class Coordinate
     {
         public double X { get; set; }
         public double Y { get; set; }
@@ -20,14 +20,44 @@ namespace Snake1
             return $"Coordinates X: {this.X}, Y: {this.Y}";
         }
 
-        public static bool operator >(Coordinate valueLeft, double valueRight)
+        public static bool operator >(Coordinate valueLeft, Coordinate valueRight)
         {
-            return (valueLeft.X > valueRight || valueLeft.Y > valueRight);
+            return (valueLeft.X > valueRight.X && valueLeft.Y > valueRight.Y);
         }
 
-        public static bool operator <(Coordinate valueLeft, double valueRight)
+        public static bool operator <(Coordinate valueLeft, Coordinate valueRight)
         {
-            return (valueLeft.X < valueRight || valueLeft.Y < valueRight);
+            return (valueLeft.X < valueRight.X && valueLeft.Y < valueRight.Y);
+        }
+
+        public static Coordinate operator +(Coordinate valueLeft, Coordinate valueRight)
+        {
+            return new Coordinate(valueLeft.X + valueRight.X, valueLeft.Y + valueRight.Y);
+        }
+
+        public static Coordinate operator -(Coordinate valueLeft, Coordinate valueRight)
+        {
+            return new Coordinate(valueLeft.X - valueRight.X, valueLeft.Y - valueRight.Y);
+        }
+
+        public static Coordinate operator +(Coordinate valueLeft, double valueRight)
+        {
+            return new Coordinate(valueLeft.X + valueRight, valueLeft.Y + valueRight);
+        }
+
+        public static Coordinate operator -(Coordinate valueLeft, double valueRight)
+        {
+            return new Coordinate(valueLeft.X - valueRight, valueLeft.Y - valueRight);
+        }
+
+        public static bool operator ==(Coordinate valueLeft, Coordinate valueRight)
+        {
+            return valueLeft.X == valueRight.X && valueLeft.Y == valueRight.Y;
+        }
+
+        public static bool operator !=(Coordinate valueLeft, Coordinate valueRight)
+        {
+            return valueLeft.X != valueRight.X && valueLeft.Y != valueRight.Y;
         }
     }
 }

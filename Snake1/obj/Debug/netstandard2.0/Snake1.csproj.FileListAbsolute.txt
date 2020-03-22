@@ -1,13 +1,13 @@
 Z:\Snake1\Snake1\bin\Debug\netstandard2.0\Snake1.deps.json
 Z:\Snake1\Snake1\bin\Debug\netstandard2.0\Snake1.dll
-Z:\Snake1\Snake1\obj\Debug\netstandard2.0\Snake1.csprojAssemblyReference.cache
 Z:\Snake1\Snake1\obj\Debug\netstandard2.0\App.xaml.g.cs
 Z:\Snake1\Snake1\obj\Debug\netstandard2.0\MainPage.xaml.g.cs
 Z:\Snake1\Snake1\obj\Debug\netstandard2.0\Snake1.AssemblyInfoInputs.cache
 Z:\Snake1\Snake1\obj\Debug\netstandard2.0\Snake1.AssemblyInfo.cs
 Z:\Snake1\Snake1\bin\Debug\netstandard2.0\ref\Snake1.dll
 Z:\Snake1\Snake1\bin\Debug\netstandard2.0\Snake1.pdb
-Z:\Snake1\Snake1\obj\Debug\netstandard2.0\XamlC.stamp
 Z:\Snake1\Snake1\obj\Debug\netstandard2.0\Snake1.dll
 Z:\Snake1\Snake1\obj\Debug\netstandard2.0\ref\Snake1.dll
 Z:\Snake1\Snake1\obj\Debug\netstandard2.0\Snake1.pdb
+Z:\Snake1\Snake1\obj\Debug\netstandard2.0\XamlC.stamp
+Z:\Snake1\Snake1\obj\Debug\netstandard2.0\Snake1.csprojAssemblyReference.cache
