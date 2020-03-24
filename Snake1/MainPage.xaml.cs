@@ -23,7 +23,7 @@ namespace Snake1
 
         public Size appleSize = new Size(0.02, 0.01);
 
-        int appleCount = 0;
+        private int appleCount = 0;
 
         public Queue<ApplesViewModel._apple> apples = new Queue<ApplesViewModel._apple>();
 
@@ -102,7 +102,7 @@ namespace Snake1
 
             do
                 pos = new Coordinate(r.Next(minValue, maxValue) / (maxValue + 0.5), r.Next(minValue, maxValue) / (maxValue + 0.5));
-            while (wallUp.Bounds.IntersectsWith(new Rectangle(new Point(pos.X, pos.Y), appleSize)) && wallDown.Bounds.IntersectsWith(new Rectangle(new Point(pos.X, pos.Y), appleSize)));
+            while (new Rectangle(new Point(pos.X, pos.Y), appleSize).IntersectsWith(wallUp.Bounds) && new Rectangle(new Point(pos.X, pos.Y), appleSize).IntersectsWith(wallDown.Bounds));
 
             return pos;
         }
@@ -131,7 +131,9 @@ namespace Snake1
             Accelerometer.Stop();
             resetSnake();
 
-            await Navigation.PushModalAsync(new ModalFail());
+            await Navigation.PushModalAsync(new ModalFail(appleCount));
+
+            appleCount = 0;
         }
 
         private void updateApples(bool init = false)
@@ -227,8 +229,6 @@ namespace Snake1
                 absLayout.Children.Remove(part.view);
             }
             tail.Clear();
-
-            appleCount = 0;
 
             foreach (ApplesViewModel._apple part in apples)
             {
